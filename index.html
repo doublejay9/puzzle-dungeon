@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Puzzle Dungeon</title>
+  <script src="http://olado.github.io/doT/doT.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Fredericka+the+Great|Open+Sans:300,300italic' rel='stylesheet'>
+  <script src="dedalus.js"></script>
+  <script src="dedalus-web.js"></script>
+  <link rel="stylesheet" href="normalize.css">
+	<link rel="stylesheet" href="dungeon.css">
+</head>
+<body>
+  <div id="story">
+    <initscript>
+			story.projectorOn = false;
+			story.bookLock = true;
+			story.colorAssoc = [ ['red', 'A', 'first', 'in the space second from bottom'], ['orange', 'B', 'second', 'on the third line'], ['yellow', 'C', 'third', 'in the space second from top'], ['green', 'D', 'fourth', 'on the second line from top'], ['light blue', 'E', 'fifth', 'in the top space'], ['dark blue', 'F', 'sixth', 'on the top line'], ['purple', 'G', 'seventh', 'above the top line'] ];
+			story.filterFlipped = false;
+			story.colorSelect = function(){
+				return Math.floor(Math.random() * 7);
+			};
+			story.colorIndex = 100;
+			story.chimeIndex = 100;
+			story.chimeTally = 0;
+			story.exitDials = [0, 0, 0];
+			story.leverPull = function(){
+				story.exitDials[story.dialIndex] = story.exitDials[story.dialIndex] + 1;
+				if (story.exitDials[story.dialIndex] > 9) {
+					story.exitDials[story.dialIndex] = 0;
+				};
+			};
+			story.dialIndex = 100;
+			story.prereq = 0;
+			story.filterReq = false;
+    </initscript>
+    <beforeEveryThing>
+    </beforeEveryThing>
+    <beforeEveryPageTurn>
+    </beforeEveryPageTurn>
+    <beforeEveryParagraphShown>
+    </beforeEveryParagraphShown>
+    <afterEveryThing>
+    </afterEveryThing>
+    <afterEveryPageTurn>
+    </afterEveryPageTurn>
+    <afterEveryParagraphShown>
+    </afterEveryParagraphShown>
+    <!-- Novel -->
+    <title>Puzzle Dungeon</title>
+    <!-- Objects -->
+		<obj id="chimeMallet" inventoryName="Mallet">
+			<action id="Examine">
+				<p>It resembles a tiny hammer with a short wooden handle and a cylindrical, rubber head. A loop of twine runs through the hole drilled into the bottom of the handle.</p>
+			</action>
+			<action id="Take">
+				<when>!story.isInInventory('chimeMallet')</when>
+				<p>Taken.</p>
+				{{ story.putInInventory('chimeMallet'); }}
+			</action>
+			<action id="Drop">
+				<when>story.isInInventory('chimeMallet')</when>
+				{{? story.currentPageIs('westArena') }}
+					<p>You return it to its hook on the side of the stand.</p>
+					{{ story.removeFromInventory('chimeMallet'); }}
+				{{??}}
+					<p>You can't do that here.</p>
+				{{?}}
+			</action>
+			<action id="Strike">
+				<when>story.isInInventory('chimeMallet')</when>
+				<with id="firstChime">
+					{{ story.chimeIndex = 0; }}
+					{{ story.showParagraph('playChime'); }}
+					{{? story.chimeTally == 3 }}
+						{{ story.showParagraph('chimeAnswerYes'); }}
+						{{ story.prereq = story.prereq + 1; }}
+					{{??}}
+						{{ story.showParagraph('chimeAnswerNo'); }}
+					{{?}}
+				</with>
+				<with id="secondChime">
+					{{ story.chimeIndex = 1; }}
+					{{ story.showParagraph('playChime'); }}
+					{{ story.showParagraph('chimeAnswerNo'); }}
+				</with>
+				<with id="thirdChime">
+					{{ story.chimeIndex = 2; }}
+					{{ story.showParagraph('playChime'); }}
+					{{? story.chimeTally == 2 }}
+						{{ story.showParagraph('chimeAnswerYes'); }}
+					{{??}}
+						{{ story.showParagraph('chimeAnswerNo'); }}
+					{{?}}
+				</with>
+				<with id="fourthChime">
+					{{ story.chimeIndex = 3; }}
+					{{ story.showParagraph('playChime'); }}
+					{{? story.chimeTally == 0 }}
+						{{ story.showParagraph('chimeAnswerYes'); }}
+					{{??}}
+						{{ story.showParagraph('chimeAnswerNo'); }}
+					{{?}}
+				</with>
+				<with id="fifthChime">
+					{{ story.chimeIndex = 4; }}
+					{{ story.showParagraph('playChime'); }}
+					{{? story.chimeTally == 1 }}
+						{{ story.showParagraph('chimeAnswerYes'); }}
+					{{??}}
+						{{ story.showParagraph('chimeAnswerNo'); }}
+					{{?}}
+				</with>
+				<with id="sixthChime">
+					{{ story.chimeIndex = 5; }}
+					{{ story.showParagraph('playChime'); }}
+					{{ story.showParagraph('chimeAnswerNo'); }}
+				</with>
+				<with id="seventhChime">
+					{{ story.chimeIndex = 6; }}
+					{{ story.showParagraph('playChime'); }}
+					{{ story.showParagraph('chimeAnswerNo'); }}
+				</with>
+				<p>This has no visible effect.</p>
+			</action>
+		</obj>
+		<obj id="silverKey" inventoryName="Silver key">
+			<action id="Use with">
+				<with id="codeBook">
+					<p>You unlock and open the book.</p>
+					{{ story.bookLock = false; }}
+					{{ story.prereq = story.prereq + 1; }}
+					{{ story.removeFromInventory('silverKey'); }}
+				</with>
+				<p>The key doesn't fit anywhere.</p>
+			</action>
+		</obj>
+    <!-- Pages -->
+    <page id="intro">
+      <p>You are a prisoner. You were not always so, yet you can't remember how you came to be one. Perhaps you don't want to remember. The fact that you are a captive is the only thing that sticks in your memory. It's only thing that's relevant.</p>
+			<p>Something shifts. It's as if a great power has bent your path toward some unknown elsewhere. Deeper into prison. Or maybe a way out.</p>
+    </page>
+    <page id="darkAlcove" class="first">
+			<p>You wake up in a cramped space, only tall enough for you to sit up straight, and as long and wide as the mattress beneath you. There is a stone wall on one side and what feels like a <turn to="practiceArena1">curtain</turn> on the other. You can't determine much else since you can't see anything.</p>
+			{{ story.putInInventory('silverKey'); }}
+    </page>
+    <page id="practiceArena1">
+			<p>You slip past the curtain and step into a massive room made entirely of gray stone. The place reminds you of a crypt deep under a grand cathedral. A <show paragraph="chandelier">chandelier</show> hangs from the vaulted ceiling, lighting the room with an unusual blue-white glow.</p>
+			<p>A <show paragraph="exitDoor">large door</show> blocks your way forward. A thick, black curtain hangs on the wall behind you, concealing the alcove you came from. Archways are cut into the walls on your <turn to="westArena">left</turn> and <turn to="eastArena">right</turn>, leading into smaller chambers.</p>
+			<p>A <show paragraph="podium">wooden podium</show> stands in the center of the room.</p>
+		</page>
+		<paragraph id="chandelier">
+			<p>It's large and seems to be made of brass. The light is too bright for you to determine much more than this. You do wonder what it holds and why it glows such an unusual color.</p>
+		</paragraph>
+		<paragraph id="exitDoor">
+			<p>It is huge and it must be incredibly heavy. It looks like it was carved out of the wall. There is a row of three <show paragraph="pluralDials">dials</show> embedded in the stone at eye level, each with a little <interact with="doorLevers">lever</interact> next to it. Currently, they're set to {{= story.exitDials.join("")}}.</p>
+		</paragraph>
+		<obj id="doorLevers">
+			<action id="Pull first lever">
+				{{ story.dialIndex = 0; }}
+				{{ story.leverPull(); }}
+				{{ story.showParagraph('endStory'); }}
+			</action>
+			<action id="Pull second lever">
+				{{ story.dialIndex = 1; }}
+				{{ story.leverPull(); }}
+				{{ story.showParagraph('endStory'); }}
+			</action>
+			<action id="Pull third lever">
+				{{ story.dialIndex = 2; }}
+				{{ story.leverPull(); }}
+				{{ story.showParagraph('endStory'); }}
+			</action>
+		</obj>
+		<paragraph id="pluralDials">
+			<p>Three white wheels hang in a niche carved into the door, painted with black numbers running (you assume) from 0 to 9. The tiny levers between them turn each wheel independently. Right now, the dials read {{= story.exitDials.join("")}}.</p>
+		</paragraph>
+		<paragraph id="podium">
+			<p>An unimpressive piece of simple construction. It holds {{? story.bookLock == true }}a locked{{??}}an open{{?}} <interact with="codeBook">book</interact>.</p>
+		</paragraph>
+		<obj id="codeBook">
+			<action id="Examine">
+				<p>It's a large book with metal covers. {{? story.bookLock == true }}It is fastened shut with a silver padlock.{{??}}Cryptic messages are written inside it &mdash; clues of how to open the huge door.{{?}}</p>
+			</action>
+			<action id="Read">
+				{{? story.bookLock != true }}
+					<p>The left page reads,</p>
+					<p class="bookText">The machines here will give you the name of the clue number. X is a number less than 9.</p>
+					<p>The right page reads,</p>
+					<p class="bookText">Divide the clue number by X to get the first digit of the door code. Add X to the quotient to get the second digit. Add 1 to X to get the third.</p>
+				{{??}}
+					<p>That's awfully hard to do when the book is locked shut.</p>
+				{{?}}
+			</action>
+		</obj>
+		<paragraph id="endStory">
+			<p>You pull the lever beside the {{= story.colorAssoc[story.dialIndex][2]}} dial. Now they read {{= story.exitDials.join("")}}.</p>
+			{{? story.exitDials.toString() === "5,7,3" }}
+				{{? story.prereq == 3 }}
+					<p>There's a sudden whirling, ratcheting sound like a complicated set of unseen gears springing to life. With a heavy groan, the massive door swings out on its own. Beyond it is inky blackness &mdash; a passage leading out of the dungeon.</p>
+					<p>At last, you have escaped.</p>
+					{{ story.endGame(); }}
+				{{??}}
+					<p>Nothing happens.</p>
+				{{?}}
+			{{??}}
+				<p>Nothing happens.</p>
+			{{?}}
+		</paragraph>
+		<page id="westArena">
+			<p>The square room is lit by brass <show paragraph="sconces">sconces</show> on the walls. Against the far wall is a stand with seven bronze <show paragraph="chimes">chimes</show> that are nearly as tall as you are. A small <interact with="chimeMallet">mallet</interact> hangs from a hook on the side of the stand. The archway leads back to the <turn to="practiceArena2">central chamber.</turn></p>
+			<p>A white rectangle is painted on the wall beside the chimes, divided into fourths by black horizontal lines. It resembles a music staff.</p>
+			{{? story.chimeTally == 1 }}
+				<p>A {{= story.colorAssoc[3][0]}} oval sits on the staff &mdash; {{= story.colorAssoc[3][3]}} &mdash; just like a music note.</p>
+			{{?}}
+			{{? story.chimeTally == 2 }}
+				<p>Colored ovals are arranged on the staff like music notes: a {{= story.colorAssoc[3][0]}} one {{= story.colorAssoc[3][3]}}, and a {{= story.colorAssoc[4][0]}} one {{= story.colorAssoc[4][3]}}.</p>
+			{{?}}
+			{{? story.chimeTally == 3 }}
+				<p>Colored ovals are arranged on the staff like music notes: a {{= story.colorAssoc[3][0]}} one {{= story.colorAssoc[3][3]}}, a {{= story.colorAssoc[4][0]}} one {{= story.colorAssoc[4][3]}}, and a {{= story.colorAssoc[2][0]}} one {{= story.colorAssoc[2][3]}}.</p>
+			{{?}}
+			{{? story.chimeTally == 4 }}
+				<p>Colored ovals are arranged on the staff like music notes: a {{= story.colorAssoc[3][0]}} one {{= story.colorAssoc[3][3]}}, a {{= story.colorAssoc[4][0]}} one {{= story.colorAssoc[4][3]}}, a {{= story.colorAssoc[2][0]}} one {{= story.colorAssoc[2][3]}}, and a {{= story.colorAssoc[0][0]}} one {{= story.colorAssoc[0][3]}}.</p>
+			{{?}}
+			<p class="chimeHost">
+				<interact with="firstChime">first chime</interact>
+				<interact with="secondChime">second chime</interact>
+				<interact with="thirdChime">third chime</interact>
+				<interact with="fourthChime">fourth chime</interact>
+				<interact with="fifthChime">fifth chime</interact>
+				<interact with="sixthChime">sixth chime</interact>
+				<interact with="seventhChime">seventh chime</interact>
+			</p>
+			<paragraph id="sconces">
+				<p>The metal cones hold handfuls of glowing crystals. They emit the same kind of blue-white light coming from the chandelier in the central room. But you still have no idea what makes the crystals glow.</p>
+			</paragraph>
+			<paragraph id="chimes">
+				<p>They hang in a row from longest to shortest. Each hollow tube is perfectly round and polished. You can easily make out your own distorted reflection in them.</p>
+			</paragraph>
+			<obj id="firstChime"></obj>
+			<obj id="secondChime"></obj>
+			<obj id="thirdChime"></obj>
+			<obj id="fourthChime"></obj>
+			<obj id="fifthChime"></obj>
+			<obj id="sixthChime"></obj>
+			<obj id="seventhChime"></obj>
+		</page>
+		<paragraph id="playChime">
+			<p>You hit the {{= story.colorAssoc[story.chimeIndex][2]}} chime and a single clear, beautiful note rings out, echoing through the whole dungeon. On the staff on the wall, you see a {{= story.colorAssoc[story.chimeIndex][0]}} oval appear {{= story.colorAssoc[story.chimeIndex][3]}}.</p>
+		</paragraph>
+		<paragraph id="chimeAnswerYes">
+			<p>The oval remains after the sound has faded away.</p>
+			{{ story.chimeTally = story.chimeTally + 1; }}
+		</paragraph>
+		<paragraph id="chimeAnswerNo">
+			<p>The oval disappears as the sound fades away.</p>
+		</paragraph>
+		<page id="eastArena">
+			<p>This long room is a third of the size of the central chamber. Its main light source is the blue-white glow that pours in through the open <turn to="practiceArena2">archway</turn>.</p>
+			<p>A large white square is painted on one wall. A <interact with="projector">projector</interact> stands at the other end of the room.</p>
+			{{? story.projectorOn == true }}
+				{{? story.flippedFilter != true }}
+					<p>White light shoots out of the projector, illuminating the wall with the white square.</p>
+				{{??}}
+					<p>A beam of {{= story.colorAssoc[story.colorIndex][0]}} light shoots out of the projector, illuminating the opposite wall. A white letter {{= story.colorAssoc[story.colorIndex][1]}} floats in the center of the painted square.</p>
+				{{?}}
+			{{?}}
+			<obj id="projector">
+				<action id="Examine">
+					<p>The small metal box sits on a stand, both painted black. The glass lens is pointed at the white square painted on the opposite wall. On either side of the lens are copper rings holding colored filters &mdash; three on one side, four on the other, seven in all. It seems that you can flip these over the lens. A switch at the back turns the machine on and off.</p>
+				</action>
+				<action id="Flip switch">
+					{{? story.projectorOn != true }}
+						{{? story.flippedFilter != true }}
+							<p>The switch clicks as you turn on the projector. The machine softly hums as white light pours out, illuminating the far wall.</p>
+							{{ story.projectorOn = true; }}
+						{{??}}
+							<p>The switch clicks as you turn on the projector. The machine softly hums as {{= story.colorAssoc[story.colorIndex][0]}} light pours out, illuminating the far wall. You can see a white {{= story.colorAssoc[story.colorIndex][1]}} floating in the middle of the square.</p>
+							{{ story.projectorOn = true; }}
+						{{?}}
+					{{??}}
+						{{? story.flippedFilter != true }}
+							<p>The switch clicks as you turn off the projector. The white light instantly vanishes. The room now looks much darker.</p>
+							{{ story.projectorOn = false; }}
+						{{??}}
+							<p>The switch clicks as you turn off the projector. The {{= story.colorAssoc[story.colorIndex][0]}} light instantly vanishes. The room now looks much darker.</p>
+							{{ story.projectorOn = false; }}
+						{{?}}
+					{{?}}
+				</action>
+				<action id="Flip filter">
+					{{ story.colorIndex = story.colorSelect(); }}
+					{{? story.projectorOn == true }}
+						<p>You flip a random filter over the lens. The light turns {{= story.colorAssoc[story.colorIndex][0]}} and you can now see a white {{= story.colorAssoc[story.colorIndex][1]}} in the center of the painted square.</p>
+						{{ story.flippedFilter = true; }}
+						{{? story.filterReq == false }}
+							{{ story.prereq = story.prereq + 1; }}
+							{{ story.filterReq = true; }}
+						{{?}}
+					{{??}}
+						<p>You flip a random filter over the lens. Nothing changes. You will need to turn the projector on.</p>
+						{{ story.flippedFilter = true; }}
+						{{? story.filterReq == false }}
+							{{ story.prereq = story.prereq + 1; }}
+							{{ story.filterReq = true; }}
+						{{?}}
+					{{?}}
+				</action>
+			</obj>
+		</page>
+		<page id="practiceArena2">
+			<p>The massive room made entirely of gray stone. The <show paragraph="chandelier">chandelier</show> above gives off a strange blue-white glow. A <show paragraph="exitDoor">huge door</show> is cut out of one wall. A black curtain hangs on the opposite wall, concealing the alcove you woke up in. Archways lead to smaller rooms &mdash; one that is <turn to="westArena">well-lit</turn>, and another that is <turn to="eastArena">filled with shadows</turn>.</p>
+			<p>A <show paragraph="podium">wooden podium</show> stands in the center of the room.</p>
+		</page>
+  </div>
+  <div id="wrapper">
+		<div id="title"></div>
+    <div id="inventoryHostWrapper">
+      <h2>Inventory</h2>
+      <div id="inventoryHost"></div>
+    </div>
+    <div id="host"></div>
+  </div>
+  <div id="interactionHost"></div>
+  <div id="undoStageHost"></div>
+	<div id="credits">
+		<p>Story and visual design by Joyce Lewis &copy; 2014</p>
+		<p>Created with <a href="https://github.com/pistacchio/Dedalus">Dedalus</a></p>
+		<p>View source code and full credits on GitHub</p>
+	</div>
+  <div id="footer">
+    <a id="undoHost" href="#">Undo</a> &bull; <a id="saveHost" href="#">Save</a> &bull; <a id="restoreHost" href="#">Restore</a> &bull; <a id="reseteHost" href="#">Reset</a> &bull; <a id="creditsPop" href="#">Credits</a>
+  </div>
+  <script>
+    $(function () {
+      new DedalusWeb({
+        domSource         : $('#story'),
+        domTarget         : $('#host'),
+        titleTarget       : $('#title'),
+        inventoryTarget   : $('#inventoryHost'),
+        interactionTarget : $('#interactionHost'),
+        undoTarget        : $('#undoHost'),
+        undoStageTarget   : $('#undoStageHost'),
+        saveTarget        : $('#saveHost'),
+        restoreTarget     : $('#restoreHost'),
+        resetTarget       : $('#reseteHost'),
+      });
+    });
+  </script>
+	<script>
+		$('#creditsPop').click(function(event) {
+			event.preventDefault();
+			$('#credits').fadeToggle();
+		});
+	</script>
+</body>
+</html>
