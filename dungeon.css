@@ -1,0 +1,150 @@
+/**********************
+	Page Styles
+**********************/
+
+html, body {
+	height: 100%;
+}
+
+body {
+	background-image: url(teal_marble.jpg);
+	color: #fff;
+}
+
+#story, #undoStageHost, #host p.chimeHost {
+	display: none;
+}
+
+#host a:hover, #interactionHost a:hover, #inventoryHost a:hover {
+	text-decoration: underline;
+}
+
+/**********************
+	Typography
+**********************/
+
+#title, #inventoryHostWrapper h2 {
+	font-family: 'Fredericka the Great', cursive;
+	font-weight: normal;
+	text-align: center;
+}
+
+#title {
+	font-size: 3em;
+}
+
+#inventoryHostWrapper h2 {
+	font-size: 2em;
+	margin: 0;
+}
+
+#host, #inventoryHost, #footer, #interactionHost, #credits {
+	font-family: 'Open Sans', sans-serif;
+}
+
+#interactionHost, #host p.bookText {
+	font-style: italic;
+}
+
+/**********************
+	Story Pane
+**********************/
+
+#wrapper {
+	position: absolute;
+	top: 0px;
+	left: 70px;
+	width: 65%;
+}
+
+#host a, #interactionHost a {
+	color: rgb(87,189,210);
+	text-decoration: none;
+}
+
+/* Story Content --------------- */
+
+#host p.bookText {
+	background: rgba(252,246,207,0.8);
+	padding: 10px;
+	color: #000;
+}
+
+/* Interacting with Objects --------------- */
+
+#interactionHost {
+	position: absolute;
+	background: rgb(15,40,45);
+	border: 1px solid rgb(87,189,210);
+}
+
+#interactionHost ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#interactionHost li {
+	display: inline;
+	padding: 10px;
+}
+
+/**********************
+	Inventory
+**********************/
+
+#inventoryHostWrapper {
+	float: left;
+	position: fixed;
+	right: 35px;
+	width: 20%;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+}
+
+#inventoryHost ul {
+	list-style: none;
+}
+
+#inventoryHost a {
+	font-size: 1.1em;
+	color: rgb(87,189,210);
+	text-decoration: none;
+}
+
+/**********************
+	Footer
+**********************/
+
+#footer {
+	position: fixed;
+	bottom: 10px;
+	right: 20px;
+}
+
+#footer a {
+	color: #aaa;
+}
+
+#footer a:hover {
+	color: rgb(87,189,210);
+}
+
+#credits {
+	position: fixed;
+	bottom: 35px;
+	right: 20px;
+	display: none;
+	background: rgb(15,40,45);
+	border: 1px solid rgb(87,189,210);
+	padding: 10px;
+	z-index: 1;
+}
+
+#credits a {
+	color: rgb(87,189,210);
+}
+
+#credits a:hover {
+	text-decoration: none;
+}
