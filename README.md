@@ -1,18 +1,18 @@
 Puzzle Dungeon
 ==============
 
-This is the data for the interactive fiction *Puzzle Dungeon*. You can play it here. {add link to live site}
+This is the data for the interactive fiction *Puzzle Dungeon*. You can play it [here](http://doublejay9.github.io/YAMWA).
 
 Credits
 -------
 
-This game was created with the Dedalus framework. {link to GitHub repo}
+This game was created with the [Dedalus](https://github.com/pistacchio/Dedalus) framework.
 
-Background texture by WebTreats ETC. {link}
+Background texture by [WebTreats ETC](http://www.webtreats.mysitemyway.com).
 
 Fonts: "Fredricka the Great" and "Open Sans" through Google Web Fonts.
 
 Copyright
 ---------
 
-The narrative text and game-specific code contained within story.html is copyrighted Joyce Lewis. You may not reuse anything therein without permission.
+The narrative text and game-specific code contained within index.html is copyrighted 2014 Joyce Lewis. You may not reuse anything therein without permission.
