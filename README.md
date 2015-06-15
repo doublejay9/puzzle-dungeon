@@ -15,4 +15,4 @@ Fonts: "Fredricka the Great" and "Open Sans" through Google Web Fonts.
 Copyright
 ---------
 
-The narrative text and game-specific code contained within index.html is copyrighted 2014 Joyce Lewis. You may not reuse anything therein without permission.
+The narrative text and game-specific code contained within `index.html` is &copy; 2014 Joyce Lewis. You may not reuse the text and code therein without permission.
